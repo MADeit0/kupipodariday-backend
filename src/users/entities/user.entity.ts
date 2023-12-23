@@ -4,12 +4,12 @@ import { Entity, Column } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column('varchar', { unique: true, length: 30 })
+  @Column({ unique: true, length: 30 })
   @IsString()
   @Length(2, 30)
   username: string;
 
-  @Column('varchar', {
+  @Column({
     unique: true,
     length: 200,
     default: 'Пока ничего не рассказал о себе',
