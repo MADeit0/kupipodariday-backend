@@ -1,6 +1,9 @@
 import { IsEmail, IsOptional, IsString, IsUrl, Length } from 'class-validator';
 import { BaseEntity } from 'src/entities/base.entity';
-import { Entity, Column } from 'typeorm';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
+import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
+import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
@@ -30,4 +33,13 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   @IsString()
   password: string;
+
+  @OneToMany(() => Wish, (wish) => wish.owner)
+  wishes: Wish[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
+  wishlists: Wishlist[];
+
+  @OneToMany(() => Offer, (offer) => offer.user)
+  offers: Offer[];
 }
