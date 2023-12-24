@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
+import { Offer } from './offers/entities/offer.entity';
 // import { WishesModule } from './wishes/wishes.module';
 // import { WishlistsModule } from './wishlists/wishlists.module';
 // import { OffersModule } from './offers/offers.module';
@@ -16,7 +17,7 @@ import { User } from './users/entities/user.entity';
       username: 'student',
       password: 'student',
       database: 'kupipodariday',
-      entities: [User],
+      entities: [User, Offer],
       synchronize: true,
     }),
   ],
