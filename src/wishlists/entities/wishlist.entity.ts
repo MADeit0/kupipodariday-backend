@@ -1,7 +1,8 @@
 import { IsString, IsUrl, Length } from 'class-validator';
 import { BaseEntity } from 'src/entities/base.entity';
-import { Column } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
+@Entity()
 export class Wishlist extends BaseEntity {
   @Column({ length: 250 })
   @IsString()
