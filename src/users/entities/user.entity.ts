@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+  MinLength,
+} from 'class-validator';
 import { BaseEntity } from 'src/entities/base.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -13,11 +20,11 @@ export class User extends BaseEntity {
   username: string;
 
   @Column({
-    unique: true,
     length: 200,
     default: 'Пока ничего не рассказал о себе',
   })
   @IsString()
+  @IsOptional()
   @Length(2, 200)
   about: string;
 
@@ -30,8 +37,9 @@ export class User extends BaseEntity {
   @IsEmail()
   email: string;
 
-  @Column({ unique: true })
+  @Column()
   @IsString()
+  @MinLength(2)
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)
