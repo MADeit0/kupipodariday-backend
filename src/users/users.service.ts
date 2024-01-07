@@ -8,18 +8,22 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+    return this.usersRepository.save(createUserDto);
+  }
+
+  findOne(id: number) {
+    return this.usersRepository.findOneBy({ id });
   }
 
   async findUserByField(
     value: string | number,
     field: 'id' | 'username' | 'email',
   ) {
-    const user = await this.userRepository.findOneBy({ [field]: value });
+    const user = await this.usersRepository.findOneBy({ [field]: value });
     if (!user) {
       throw new NotFoundException('Пользователь не найден');
     }

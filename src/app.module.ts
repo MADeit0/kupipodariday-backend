@@ -2,10 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
-import { Offer } from './offers/entities/offer.entity';
-import { Wish } from './wishes/entities/wish.entity';
-import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -24,7 +20,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('PG_PASSWORD'),
         database: configService.get('PG_DB'),
         synchronize: configService.get('SYNCHRONIZE'),
-        entities: [User, Offer, Wish, Wishlist],
+        // entities: [User, Offer, Wish, Wishlist],
+        entities: ['dist/**/*.entity.js'],
       }),
     }),
     UsersModule,
