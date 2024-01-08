@@ -20,7 +20,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('PG_PASSWORD'),
         database: configService.get('PG_DB'),
         synchronize: configService.get('SYNCHRONIZE'),
-        // entities: [User, Offer, Wish, Wishlist],
         entities: ['dist/**/*.entity.js'],
       }),
     }),

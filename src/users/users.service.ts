@@ -16,20 +16,19 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    const user = await this.usersRepository.findOneBy({ username });
-
-    return user;
+    return this.usersRepository.findOneBy({ username });
   }
 
-  findOne(id: number) {
+  findUserById(id: number) {
     return this.usersRepository.findOneBy({ id });
   }
 
-  async findUserByField(
-    value: string | number,
-    field: 'id' | 'username' | 'email',
-  ) {
-    const user = await this.usersRepository.findOneBy({ [field]: value });
+  findUserByEmail(email: string) {
+    return this.usersRepository.findOneBy({ email });
+  }
+
+  async findUser(username: string) {
+    const user = await this.findByUsername(username);
     if (!user) {
       throw new NotFoundException('Пользователь не найден');
     }
