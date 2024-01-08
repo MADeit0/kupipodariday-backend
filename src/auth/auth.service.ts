@@ -16,6 +16,18 @@ export class AuthService {
     return this.usersService.create(createUserDto);
   }
 
+  async validatePassword(username: string, password: string) {
+    const user = await this.usersService.findByUsername(username);
+
+    if (user?.password === password) {
+      const { password, ...result } = user;
+
+      return result;
+    }
+
+    return null;
+  }
+
   auth(user: User) {
     const payload = { sub: user.id };
 

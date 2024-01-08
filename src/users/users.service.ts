@@ -15,6 +15,12 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
+  async findByUsername(username: string) {
+    const user = await this.usersRepository.findOneBy({ username });
+
+    return user;
+  }
+
   findOne(id: number) {
     return this.usersRepository.findOneBy({ id });
   }
