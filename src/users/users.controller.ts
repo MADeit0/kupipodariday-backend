@@ -8,6 +8,7 @@ import {
   Request,
   UseInterceptors,
   ClassSerializerInterceptor,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -33,7 +34,11 @@ export class UsersController {
 
   @UseInterceptors(RemoveEmailInterceptor)
   @Get(':username')
-  findUser(@Param('username') username: string) {
-    return this.usersService.findUser(username);
+  async findUser(@Param('username') username: string) {
+    const user = await this.usersService.findByUsername(username);
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+    return user;
   }
 }
