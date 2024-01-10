@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   IsEmail,
   IsOptional,
@@ -38,8 +39,10 @@ export class User extends BaseEntity {
   email: string;
 
   @Column()
+  @Exclude()
   @IsString()
   @MinLength(2)
+  @Expose()
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)
