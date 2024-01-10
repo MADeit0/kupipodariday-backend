@@ -11,11 +11,11 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUserDto) {
     return this.usersRepository.save(createUserDto);
   }
 
-  async findByUsername(username: string) {
+  findByUsername(username: string) {
     return this.usersRepository.findOneBy({ username });
   }
 

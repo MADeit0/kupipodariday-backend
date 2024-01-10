@@ -36,9 +36,8 @@ export class UsersController {
   @Get(':username')
   async findUser(@Param('username') username: string) {
     const user = await this.usersService.findByUsername(username);
-    if (!user) {
-      throw new NotFoundException('Пользователь не найден');
-    }
+    if (!user) throw new NotFoundException('Пользователь не найден');
+
     return user;
   }
 }
