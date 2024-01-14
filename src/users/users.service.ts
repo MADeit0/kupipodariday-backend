@@ -52,4 +52,13 @@ export class UsersService {
     }
     return user;
   }
+
+  async findWishes(id: number) {
+    const { wishes } = await this.usersRepository.findOne({
+      select: ['wishes'],
+      where: { id },
+      relations: ['wishes'],
+    });
+    return wishes;
+  }
 }

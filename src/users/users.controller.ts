@@ -48,6 +48,12 @@ export class UsersController {
     return this.usersService.findMany(findUserDto.query);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('me/wishes')
+  getOwnerWishes(@Request() req: { user: User }) {
+    return this.usersService.findWishes(req.user.id);
+  }
+
   @UseInterceptors(RemoveEmailInterceptor)
   @Get(':username')
   findUser(@Param('username') username: string) {
