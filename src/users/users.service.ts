@@ -61,4 +61,9 @@ export class UsersService {
     });
     return wishes;
   }
+
+  async getUserWishes(username: string) {
+    const { id } = await this.findByUsername(username);
+    return await this.findWishes(id);
+  }
 }

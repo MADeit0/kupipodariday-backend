@@ -59,4 +59,10 @@ export class UsersController {
   findUser(@Param('username') username: string) {
     return this.usersService.findUser(username);
   }
+
+  @UseInterceptors(RemoveEmailInterceptor)
+  @Get(':username/wishes')
+  getUserWishes(@Param('username') username: string) {
+    return this.usersService.getUserWishes(username);
+  }
 }
