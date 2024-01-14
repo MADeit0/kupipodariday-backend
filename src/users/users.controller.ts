@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from './entities/user.entity';
 import { RemoveEmailInterceptor } from 'src/users/interseptors/remove-email.interceptor';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FindUserDto } from './dto/find-user.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
@@ -40,6 +41,11 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.updateOne(req.user, updateUserDto);
+  }
+
+  @Post('find')
+  findByMany(@Body() findUserDto: FindUserDto) {
+    return this.usersService.findMany(findUserDto.query);
   }
 
   @UseInterceptors(RemoveEmailInterceptor)

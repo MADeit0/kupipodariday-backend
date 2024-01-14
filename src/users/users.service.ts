@@ -39,4 +39,17 @@ export class UsersService {
     await this.usersRepository.update(user.id, updateUserDto);
     return { message: 'Изменения успешно сохранены!' };
   }
+
+  async findMany(query: string) {
+    const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const user = emailRegExp.test(query)
+      ? await this.findUserByEmail(query)
+      : await this.findByUsername(query);
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+    return user;
+  }
 }
