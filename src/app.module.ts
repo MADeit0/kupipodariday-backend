@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
+import { WishesModule } from './wishes/wishes.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
     }),
     UsersModule,
     AuthModule,
+    WishesModule,
   ],
   controllers: [AppController],
   providers: [AppService, IsUniqueConstraint],
