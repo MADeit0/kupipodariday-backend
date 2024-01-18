@@ -1,8 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { Wish } from './entities/wish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UpdateWishDto } from './dto/update-wish.dto';
 
 @Injectable()
 export class WishesService {
@@ -41,5 +47,31 @@ export class WishesService {
       order: { createdAt: 'DESC' },
       relations: ['owner'],
     });
+  }
+
+  async updateWish(id: number, updateWishDto: UpdateWishDto, userId: number) {
+    const wish = await this.wishesRepository.findOne({
+      where: { id },
+      relations: { owner: true },
+      select: { raised: true, id: true, owner: { id: true } },
+    });
+    if (wish.owner.id !== userId)
+      throw new ForbiddenException('Нельзя редактировать чужие подарки');
+
+    if (wish.raised > 0)
+      throw new BadRequestException(
+        'Нельзя редактировать подарок когда уже есть желающие скинуться',
+      );
+
+    await this.wishesRepository.update(id, updateWishDto);
+
+    return { message: 'Изменения успешно сохранены!' };
+  }
+  async removeOne(id: number, userId: number) {
+    const wish = await this.findOne(id);
+    if (wish.owner.id == userId)
+      throw new ForbiddenException('Нельзя удалять чужие подарки');
+
+    return await this.wishesRepository.remove(wish);
   }
 }
