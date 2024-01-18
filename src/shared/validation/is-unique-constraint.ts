@@ -24,7 +24,6 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
 
   defaultMessage?(validationArguments?: ValidationArguments): string {
     const { property, value } = validationArguments;
-    console.log(validationArguments);
     return `${property} "${value}" already exists. Choose another ${property}`;
   }
 }
