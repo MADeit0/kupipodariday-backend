@@ -19,7 +19,7 @@ export class Wish extends BaseEntity {
   @IsUrl()
   image: string;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  @Column('decimal', { precision: 5, scale: 2, default: 1 })
   @IsNumber({ maxDecimalPlaces: 2 })
   price: number;
 
