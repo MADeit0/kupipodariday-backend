@@ -1,20 +1,22 @@
-import { IsNumber, IsString, IsUrl, Length } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { Wish } from '../entities/wish.entity';
+import { PickType } from '@nestjs/mapped-types';
 
-export class CreateWishDto {
-  @IsString()
-  @Length(1, 250)
+export class CreateWishDto extends PickType(Wish, [
+  'name',
+  'link',
+  'image',
+  'price',
+  'description',
+] as const) {
+  @Expose()
   name: string;
-
-  @IsUrl()
+  @Expose()
   link: string;
-
-  @IsUrl()
+  @Expose()
   image: string;
-
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @Expose()
   price: number;
-
-  @IsString()
-  @Length(1, 1024)
+  @Expose()
   description: string;
 }

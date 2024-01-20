@@ -9,6 +9,7 @@ import { Wish } from './entities/wish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateWishDto } from './dto/update-wish.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class WishesService {
@@ -73,5 +74,24 @@ export class WishesService {
       throw new ForbiddenException('Нельзя удалять чужие подарки');
 
     return await this.wishesRepository.remove(wish);
+  }
+
+  async copy(id: number, userId: number) {
+    const wish = await this.findOne(id);
+    if (wish.owner.id === userId)
+      throw new ForbiddenException('Нельзя копировать свои подарки');
+
+    await this.wishesRepository.update(id, {
+      copied: ++wish.copied,
+    });
+
+    const copyWish = this.wishesRepository.create({
+      ...wish,
+    });
+
+    const transformedCopyWish = plainToClass(CreateWishDto, copyWish, {
+      strategy: 'excludeAll',
+    });
+    return await this.create(userId, transformedCopyWish);
   }
 }
