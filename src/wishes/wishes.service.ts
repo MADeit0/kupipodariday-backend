@@ -70,7 +70,7 @@ export class WishesService {
   }
   async removeOne(id: number, userId: number) {
     const wish = await this.findOne(id);
-    if (wish.owner.id == userId)
+    if (wish.owner.id !== userId)
       throw new ForbiddenException('Нельзя удалять чужие подарки');
 
     return await this.wishesRepository.remove(wish);
