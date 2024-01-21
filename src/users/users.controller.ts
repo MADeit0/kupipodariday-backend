@@ -7,7 +7,6 @@ import {
   UseGuards,
   Request,
   UseInterceptors,
-  ClassSerializerInterceptor,
   Patch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -18,7 +17,6 @@ import { RemoveEmailInterceptor } from 'src/users/interseptors/remove-email.inte
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
