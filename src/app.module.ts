@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WishesModule } from './wishes/wishes.module';
 
 @Module({
@@ -30,6 +31,13 @@ import { WishesModule } from './wishes/wishes.module';
     WishesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, IsUniqueConstraint],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    AppService,
+    IsUniqueConstraint,
+  ],
 })
 export class AppModule {}
