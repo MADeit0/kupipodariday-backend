@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WishesModule } from './wishes/wishes.module';
+import { OffersModule } from './offers/offers.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { WishesModule } from './wishes/wishes.module';
     UsersModule,
     AuthModule,
     WishesModule,
+    OffersModule,
   ],
   controllers: [AppController],
   providers: [

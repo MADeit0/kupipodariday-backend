@@ -94,4 +94,8 @@ export class WishesService {
     });
     return await this.create(userId, transformedCopyWish);
   }
+
+  async updateWishRaised(id: number, totalAmount: number) {
+    return await this.wishesRepository.update(id, { raised: totalAmount });
+  }
 }
