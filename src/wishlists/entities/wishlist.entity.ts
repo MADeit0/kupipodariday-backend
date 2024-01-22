@@ -21,7 +21,7 @@ export class Wishlist extends BaseEntity {
   image: string;
 
   @ManyToOne(() => User, (user) => user.wishes)
-  user: User;
+  owner: User;
 
   @ManyToMany(() => Wish)
   @JoinTable()

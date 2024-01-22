@@ -9,6 +9,7 @@ import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WishesModule } from './wishes/wishes.module';
 import { OffersModule } from './offers/offers.module';
+import { WishlistsModule } from './wishlists/wishlists.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { OffersModule } from './offers/offers.module';
     AuthModule,
     WishesModule,
     OffersModule,
+    WishlistsModule,
   ],
   controllers: [AppController],
   providers: [
