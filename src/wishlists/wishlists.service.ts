@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,12 +38,38 @@ export class WishlistsService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} wishlist`;
+  async findOne(id: number) {
+    const wish = await this.wishlistsRepository.findOne({
+      where: { id },
+      relations: { owner: true, items: true },
+    });
+    if (!wish) throw new NotFoundException('Коллекция не найдена');
+    return wish;
   }
 
-  update(id: number, updateWishlistDto: UpdateWishlistDto) {
-    return `This action updates a #${id} wishlist`;
+  async updateWishlist(
+    id: number,
+    { itemsId, ...updateWishlistDto }: UpdateWishlistDto,
+    userId: number,
+  ) {
+    const wishlist = await this.wishlistsRepository.findOne({
+      where: { id },
+      relations: { owner: true },
+      select: { id: true, owner: { id: true } },
+    });
+
+    if (!wishlist) throw new NotFoundException('Коллекция не найдена');
+
+    if (wishlist.owner.id !== userId)
+      throw new ForbiddenException('Нельзя редактировать чужие коллекции');
+
+    const wishes = await this.wishesService.findManyByIds(itemsId);
+
+    return await this.wishlistsRepository.save({
+      id,
+      ...updateWishlistDto,
+      items: wishes,
+    });
   }
 
   remove(id: number) {
