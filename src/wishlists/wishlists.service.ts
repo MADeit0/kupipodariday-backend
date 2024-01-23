@@ -4,20 +4,32 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { Repository } from 'typeorm';
+import { WishesService } from 'src/wishes/wishes.service';
 
 @Injectable()
 export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
-    private readonly WishlistsRepository: Repository<Wishlist>,
+    private readonly wishlistsRepository: Repository<Wishlist>,
+    private readonly wishesService: WishesService,
   ) {}
 
-  create(createWishlistDto: CreateWishlistDto) {
-    return 'This action adds a new wishlist';
+  async create(userId: number, createWishlistDto: CreateWishlistDto) {
+    const wishes = await this.wishesService.findManyByIds(
+      createWishlistDto.itemsId,
+    );
+
+    const newWishlist = this.wishlistsRepository.create({
+      ...createWishlistDto,
+      owner: { id: userId },
+      items: wishes,
+    });
+
+    return await this.wishlistsRepository.save(newWishlist);
   }
 
   async findAll() {
-    return await this.WishlistsRepository.find({
+    return await this.wishlistsRepository.find({
       relations: { owner: true, items: true },
     });
   }

@@ -20,7 +20,7 @@ export class Wishlist extends BaseEntity {
   @IsUrl()
   image: string;
 
-  @ManyToOne(() => User, (user) => user.wishes)
+  @ManyToOne(() => User, (user) => user.wishlists)
   owner: User;
 
   @ManyToMany(() => Wish)
