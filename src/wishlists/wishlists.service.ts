@@ -72,7 +72,11 @@ export class WishlistsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} wishlist`;
+  async remove(id: number, userId: number) {
+    const wishlist = await this.findOne(id);
+    if (wishlist.owner.id !== userId)
+      throw new ForbiddenException('Нельзя удалять чужие подарки');
+
+    return await this.wishlistsRepository.remove(wishlist);
   }
 }
