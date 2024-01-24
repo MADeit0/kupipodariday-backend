@@ -81,9 +81,7 @@ export class WishesService {
     if (wish.owner.id === userId)
       throw new ForbiddenException('Нельзя копировать свои подарки');
 
-    await this.wishesRepository.update(id, {
-      copied: ++wish.copied,
-    });
+    await this.wishesRepository.increment({ id }, 'copied', 1);
 
     const copyWish = this.wishesRepository.create({
       ...wish,
