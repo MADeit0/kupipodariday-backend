@@ -16,17 +16,16 @@ import { RemoveEmailInterceptor } from 'src/users/interseptors/remove-email.inte
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@Request() req: { user: User }) {
     return req.user;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('me')
   updateUserProfile(
     @Request() req: { user: User },
@@ -35,13 +34,11 @@ export class UsersController {
     return this.usersService.updateOne(req.user, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('find')
   findByMany(@Body() findUserDto: FindUserDto) {
     return this.usersService.findMany(findUserDto.query);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me/wishes')
   getOwnerWishes(@Request() req: { user: User }) {
     return this.usersService.findWishes(req.user.id);
