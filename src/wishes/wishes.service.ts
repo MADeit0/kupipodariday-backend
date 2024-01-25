@@ -43,7 +43,7 @@ export class WishesService {
 
   async findTopWishes() {
     return await this.wishesRepository.find({
-      take: 6,
+      take: 20,
       order: { copied: 'DESC' },
       relations: ['owner'],
     });
@@ -51,7 +51,7 @@ export class WishesService {
 
   async findLastWishes() {
     return await this.wishesRepository.find({
-      take: 6,
+      take: 40,
       order: { createdAt: 'DESC' },
       relations: ['owner'],
     });
@@ -63,6 +63,9 @@ export class WishesService {
       relations: { owner: true },
       select: { raised: true, id: true, owner: { id: true } },
     });
+
+    if (!wish) throw new NotFoundException('Подарок не найден');
+
     if (wish.owner.id !== userId)
       throw new ForbiddenException('Нельзя редактировать чужие подарки');
 

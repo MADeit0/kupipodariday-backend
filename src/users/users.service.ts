@@ -38,13 +38,15 @@ export class UsersService {
   }
 
   async updateOne(user: User, updateUserDto: UpdateUserDto) {
-    const newPassword = await hashValue(updateUserDto.password);
+    const newPassword =
+      updateUserDto.password && (await hashValue(updateUserDto.password));
 
     await this.usersRepository.update(user.id, {
       ...updateUserDto,
       password: newPassword,
     });
-    return { message: 'Изменения успешно сохранены!' };
+
+    return await this.findUserById(user.id);
   }
 
   async findMany(query: string) {

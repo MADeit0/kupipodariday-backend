@@ -1,4 +1,12 @@
-import { IsInt, IsNumber, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUrl,
+  Length,
+  Max,
+} from 'class-validator';
 import { BaseEntity } from 'src/entities/base.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -19,12 +27,15 @@ export class Wish extends BaseEntity {
   @IsUrl()
   image: string;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 1 })
+  @Column('decimal', { precision: 10, scale: 2 })
   @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNotEmpty()
+  @Max(1000000.0)
   price: number;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
   @IsNumber({ maxDecimalPlaces: 2 })
+  @Max(1000000.0)
   raised: number;
 
   @Column({ length: 1024 })

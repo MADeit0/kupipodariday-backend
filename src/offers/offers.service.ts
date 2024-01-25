@@ -41,12 +41,13 @@ export class OffersService {
     const offer =
       (await this.offersRepository.findOne({
         where: { user: { id: userId }, item: { id: wish.id } },
-      })) || null;
+        select: { id: true, amount: true },
+      })) || undefined;
 
     return await this.offersRepository.save({
       ...createOfferDto,
       amount: parseFloat(
-        (Number(offer.amount) + Number(createOfferDto.amount)).toFixed(2),
+        (Number(offer?.amount || 0) + Number(createOfferDto.amount)).toFixed(2),
       ),
       user: { id: userId },
       item: { id: wish.id },
