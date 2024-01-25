@@ -41,6 +41,7 @@ export class UsersController {
     return this.usersService.updateOne(req.user, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('find')
   findByMany(@Body() findUserDto: FindUserDto) {
     return this.usersService.findMany(findUserDto.query);

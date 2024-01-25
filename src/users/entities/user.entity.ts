@@ -47,7 +47,7 @@ export class User extends BaseEntity {
 
   @Column()
   @IsString()
-  @MinLength(2)
+  @MinLength(6)
   @Exclude({ toPlainOnly: true })
   password: string;
 
