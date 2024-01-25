@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { hashValue } from 'src/shared/helpers/helpers';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,8 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.usersRepository.save(createUserDto);
+    const newUser = this.usersRepository.create(createUserDto);
+    return await this.usersRepository.save(newUser);
   }
 
   findByUsername(username: string) {
@@ -36,7 +38,12 @@ export class UsersService {
   }
 
   async updateOne(user: User, updateUserDto: UpdateUserDto) {
-    await this.usersRepository.update(user.id, updateUserDto);
+    const newPassword = await hashValue(updateUserDto.password);
+
+    await this.usersRepository.update(user.id, {
+      ...updateUserDto,
+      password: newPassword,
+    });
     return { message: 'Изменения успешно сохранены!' };
   }
 

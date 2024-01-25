@@ -4,6 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
+import { hashValue, verifyHash } from 'src/shared/helpers/helpers';
 
 @Injectable()
 export class AuthService {
@@ -13,13 +14,19 @@ export class AuthService {
   ) {}
 
   async signUp(createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    const { password } = createUserDto;
+    return this.usersService.create({
+      ...createUserDto,
+      password: await hashValue(password),
+    });
   }
 
   async validatePassword(username: string, password: string) {
     const user = await this.usersService.findByUsername(username);
+    const userPassword = await verifyHash(password, user?.password);
 
-    if (user?.password === password) {
+    if (userPassword) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
 
       return result;
