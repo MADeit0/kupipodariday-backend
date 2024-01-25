@@ -7,7 +7,7 @@ import {
 import { CreateWishDto } from './dto/create-wish.dto';
 import { Wish } from './entities/wish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { plainToClass } from 'class-transformer';
 
@@ -32,6 +32,13 @@ export class WishesService {
     });
     if (!wish) throw new NotFoundException('Подарок не найден');
     return wish;
+  }
+
+  async findManyByIds(wishIds: number[]) {
+    return await this.wishesRepository.find({
+      where: { id: In(wishIds) },
+      order: { createdAt: 'ASC' },
+    });
   }
 
   async findTopWishes() {
