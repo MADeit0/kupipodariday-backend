@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
 import { Repository } from 'typeorm';
 import { WishesService } from 'src/wishes/wishes.service';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class OffersService {
@@ -18,6 +19,7 @@ export class OffersService {
     private readonly wishesService: WishesService,
   ) {}
 
+  @Transactional()
   async save(userId: number, createOfferDto: CreateOfferDto) {
     const wish = await this.wishesService.findOne(createOfferDto.itemId);
 

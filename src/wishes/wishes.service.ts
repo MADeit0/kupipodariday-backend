@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { plainToClass } from 'class-transformer';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class WishesService {
@@ -78,6 +79,7 @@ export class WishesService {
 
     return { message: 'Изменения успешно сохранены!' };
   }
+
   async removeOne(id: number, userId: number) {
     const wish = await this.findOne(id);
     if (wish.owner.id !== userId)
@@ -86,6 +88,7 @@ export class WishesService {
     return await this.wishesRepository.remove(wish);
   }
 
+  @Transactional()
   async copy(id: number, userId: number) {
     const wish = await this.findOne(id);
     if (wish.owner.id === userId)
