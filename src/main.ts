@@ -5,6 +5,7 @@ import { useContainer } from 'class-validator';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
+import { nestCsrf } from 'ncsrf';
 
 async function bootstrap() {
   initializeTransactionalContext();
@@ -14,6 +15,7 @@ async function bootstrap() {
   });
   app.use(helmet());
   app.use(cookieParser());
+  app.use(nestCsrf());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(3001);
