@@ -17,7 +17,7 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
 
     const exists = await this.entityManager
       .getRepository(tableName)
-      .exist({ where: { [column]: value } });
+      .exists({ where: { [column]: value } });
 
     return exists ? false : true;
   }
