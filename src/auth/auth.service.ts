@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 // import { CreateAuthDto } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -23,6 +23,10 @@ export class AuthService {
 
   async validatePassword(username: string, password: string) {
     const user = await this.usersService.findByUsername(username);
+
+    if (!user)
+      throw new UnauthorizedException('Некорректная пара логин и пароль');
+
     const userPassword = await verifyHash(password, user?.password);
 
     if (userPassword) {

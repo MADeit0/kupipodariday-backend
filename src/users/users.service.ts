@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hashValue } from 'src/shared/helpers/helpers';
+import { DatabaseError } from 'pg-protocol';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +19,15 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newUser = this.usersRepository.create(createUserDto);
-    return await this.usersRepository.save(newUser);
+    try {
+      const newUser = this.usersRepository.create(createUserDto);
+      return await this.usersRepository.save(newUser);
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        const error = err.driverError as DatabaseError;
+        this.IsUniqueConstraint(error);
+      }
+    }
   }
 
   findByUsername(username: string) {
@@ -40,11 +52,17 @@ export class UsersService {
   async updateOne(user: User, updateUserDto: UpdateUserDto) {
     const newPassword =
       updateUserDto.password && (await hashValue(updateUserDto.password));
-
-    await this.usersRepository.update(user.id, {
-      ...updateUserDto,
-      password: newPassword,
-    });
+    try {
+      await this.usersRepository.update(user.id, {
+        ...updateUserDto,
+        password: newPassword,
+      });
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        const error = err.driverError as DatabaseError;
+        this.IsUniqueConstraint(error);
+      }
+    }
 
     return await this.findUserById(user.id);
   }
@@ -74,5 +92,23 @@ export class UsersService {
   async getUserWishes(username: string) {
     const { id } = await this.findByUsername(username);
     return await this.findWishes(id);
+  }
+  private IsUniqueConstraint(error: DatabaseError) {
+    if (error.code === '23505') {
+      const regex = /Key \((.*?)\)=\((.*?)\) already exists./;
+      const matches = error.detail.match(regex);
+      const conflictField = matches[1];
+      const conflictValue = matches[2];
+
+      if (conflictField === 'username') {
+        throw new ConflictException(
+          `Пользователь с именем ${conflictValue} уже существует`,
+        );
+      } else if (conflictField === 'email') {
+        throw new ConflictException(
+          `Пользователь с почтой ${conflictValue} уже существует`,
+        );
+      }
+    }
   }
 }
