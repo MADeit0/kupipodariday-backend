@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { IsUniqueConstraint } from './shared/validation/is-unique-constraint';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { WishesModule } from './wishes/wishes.module';
 import { OffersModule } from './offers/offers.module';
@@ -65,7 +64,6 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
       useClass: ClassSerializerInterceptor,
     },
     AppService,
-    IsUniqueConstraint,
   ],
 })
 export class AppModule {}
