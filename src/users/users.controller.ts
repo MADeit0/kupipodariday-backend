@@ -18,9 +18,10 @@ import { FindUserDto } from './dto/find-user.dto';
 import { UserProfileResponseDto } from './dto/user-profile-response.dto';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { UserPublicProfileResponseDto } from './dto/user-public-profile-response.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
