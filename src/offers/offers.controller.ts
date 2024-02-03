@@ -11,7 +11,10 @@ import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('offers')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('offers')
 export class OffersController {

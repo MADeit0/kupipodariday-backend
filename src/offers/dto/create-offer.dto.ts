@@ -1,4 +1,4 @@
-import { PickType } from '@nestjs/mapped-types';
+import { PickType } from '@nestjs/swagger';
 import { Offer } from '../entities/offer.entity';
 import { IsNumber } from 'class-validator';
 
