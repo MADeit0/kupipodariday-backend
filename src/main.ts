@@ -6,6 +6,11 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { nestCsrf } from 'ncsrf';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerDocumentOptions,
+} from '@nestjs/swagger';
 
 async function bootstrap() {
   initializeTransactionalContext();
@@ -13,6 +18,20 @@ async function bootstrap() {
     cors: true,
     abortOnError: true,
   });
+
+  const config = new DocumentBuilder()
+    .addBearerAuth()
+    .setTitle('kupipodariday')
+    .setDescription('API сервиса вишлистов')
+    .setVersion('1.0')
+    .build();
+
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  };
+  const document = SwaggerModule.createDocument(app, config, options);
+  SwaggerModule.setup('/api/docs', app, document);
+
   app.use(helmet());
   app.use(cookieParser());
   app.use(nestCsrf());

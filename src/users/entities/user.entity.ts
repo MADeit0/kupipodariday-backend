@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   IsEmail,
@@ -18,6 +19,9 @@ export class User extends BaseEntity {
   @Column({ unique: true, length: 30 })
   @IsString()
   @Length(2, 30)
+  @ApiProperty({
+    example: 'name',
+  })
   username: string;
 
   @Column({
@@ -27,21 +31,35 @@ export class User extends BaseEntity {
   @IsString()
   @IsOptional()
   @Length(2, 200)
+  @ApiProperty({
+    example: 'Пока ничего не рассказал о себе',
+    required: false,
+  })
   about: string;
 
   @Column({ default: 'https://i.pravatar.cc/300' })
   @IsOptional()
   @IsUrl()
+  @ApiProperty({
+    example: 'https://i.pravatar.cc/300',
+    required: false,
+  })
   avatar: string;
 
   @Column({ unique: true })
   @IsEmail()
+  @ApiProperty({
+    example: 'user@example.com',
+  })
   email: string;
 
   @Column()
   @IsString()
   @MinLength(6)
   @Exclude({ toPlainOnly: true })
+  @ApiProperty({
+    example: 'password',
+  })
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)

@@ -1,6 +1,4 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -53,7 +51,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
     OffersModule,
     WishlistsModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     {
       provide: APP_GUARD,
@@ -63,7 +61,6 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
-    AppService,
   ],
 })
 export class AppModule {}

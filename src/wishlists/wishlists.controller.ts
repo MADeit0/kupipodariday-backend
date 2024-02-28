@@ -15,7 +15,10 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { Wishlist } from './entities/wishlist.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('wishlistlists')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('wishlistlists')
 export class WishlistsController {

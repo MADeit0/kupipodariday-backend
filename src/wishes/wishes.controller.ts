@@ -14,7 +14,10 @@ import { CreateWishDto } from './dto/create-wish.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { UpdateWishDto } from './dto/update-wish.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('wishes')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('wishes')
 export class WishesController {
